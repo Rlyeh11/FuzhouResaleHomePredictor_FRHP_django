@@ -1,0 +1,79 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block title %}预测 - 福州二手房价格预测{% endblock %}
+{% block linkcss %}
+    <link rel="stylesheet" href="{% static 'css/predict.css' %}">
+    <script type="text/javascript"
+            src="https://api.map.baidu.com/api?v=3.0&ak=5XPLyZqIGlbHC4DvxUs5em8Qi5roacvf"></script>
+    {#    <link type="text/javascript" src="{% static 'js/getscript.js' %}">#}
+{% endblock %}
+
+{% block main %}
+    <el-main>
+        <div class="content">
+            <div class="content-row">
+                <el-card class="breadcrumb">
+                    <el-breadcrumb separator-class="el-icon-arrow-right">
+                        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                        <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+                        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+                        <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+                    </el-breadcrumb>
+                </el-card>
+            </div>
+            <div class="content-row">
+                <el-card class="card">
+                    <div id="map">
+                    </div>
+                </el-card>
+                <el-card class="card">
+
+                </el-card>
+                <el-card class="card">
+
+                </el-card>
+                <el-card class="card">
+
+                </el-card>
+            </div>
+        </div>
+    </el-main>
+
+{% endblock %}
+
+
+<script>
+    {% block vue-script %}
+        new Vue({
+            el: '#app',
+            delimiters: ["[[", "]]"],
+            mixins: [mix],
+            data() {
+                return {
+                    pageTag: '2',
+                    features: {
+                        longitude: '',
+                        latitude: '',
+                    }
+                }
+            },
+            mounted() {
+
+            },
+
+        });
+    {% endblock %}
+</script>
+{% block map-script %}
+    <script type="text/javascript">
+        var map = new BMap.Map("map", {});                 // 创建Map实例
+        var point = new BMap.Point();
+        map.centerAndZoom(new BMap.Point(116.404, 39.928), 15);     // 初始化地图,设置中心点坐标和地图级别【中心点的值设置为苏州。地图级别值设置越大，地图就放大】
+        map.enableScrollWheelZoom();
+        map.addEventListener("click", function (e) {
+            this.features.longitude = e.point.lng;
+            this.features.latitude = e.point.lat;
+            point = new BMap.Point(116.404, 39.915);
+        });
+    </script>
+{% endblock %}

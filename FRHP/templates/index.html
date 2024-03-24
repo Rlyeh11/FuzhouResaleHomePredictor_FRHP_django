@@ -1,0 +1,155 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block title %}首页 - 福州二手房房价预测{% endblock %}
+{% block linkcss %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
+{% block main %}
+    <el-main>
+        <div class="container">
+            <div class="content">
+                <div>
+                    <el-card class="overview"
+                             shadow="hover"
+                            {#                             style="background-image: url('https://picsum.photos/900/420')#}
+                             style="background-image: url('{% static "assert/overview-1.jpg" %}')
+                                     ">
+                        <div class="card-content-hover">
+                            <h2 style="font-size: 28px; margin-bottom: 8px" class="card-text">房屋二手价格预测</h2>
+                            <p style="font-size: 17px; margin-top: 7px" class="card-text">
+                                给予将要售出、购入的房屋给出价格参照</p>
+                            <div style="padding-top: 2px; padding-bottom: 10px">
+                                <el-divider></el-divider>
+                                <el-link :underline="false" icon="el-icon-thumb" href="/predict"><h3
+                                        style="font-size: 14px;margin: 0;">
+                                    试一下</h3></el-link>
+                            </div>
+
+                        </div>
+                        <div class="card-content">
+                            <h2 class="card-text">房屋二手价格预测</h2>
+                        </div>
+                    </el-card>
+                </div>
+                <div style="padding-top: 30px">
+                    <el-card class="procedure">
+                        <el-row :gutter="20" style="margin: auto;">
+                            <el-col :span="11">
+                                <div style="padding-top: 6px">
+                                    <el-timeline>
+                                        <el-timeline-item>选定房屋地点</el-timeline-item>
+                                        <el-timeline-item>选择房屋属性</el-timeline-item>
+                                        <el-timeline-item>提交 进行预测</el-timeline-item>
+                                        <el-timeline-item>获得参考结果</el-timeline-item>
+                                    </el-timeline>
+                                </div>
+                            </el-col>
+                            <el-col :span="2">
+                                <div class="divider-vertical">
+                                    <el-divider direction="vertical"></el-divider>
+                                </div>
+                            </el-col>
+                            <el-col :span="11">
+                                <div class="infinite-scroll">
+                                    <ul ref="list" class="infinite-list" style="height: 180px">
+                                        <li v-for="(value, index) in infiniteDict" :key="index">
+                                            <el-tag v-for="(item, ind) in value" :key="ind" class="tag-show"
+                                                    effect="light" type="info">
+                                                [[item]]
+                                            </el-tag>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </el-col>
+                        </el-row>
+
+
+                    </el-card>
+                </div>
+            </div>
+        </div>
+    </el-main>
+{% endblock %}
+<script>
+
+    {% block vue-script %}
+        new Vue({
+            el: '#app',
+            delimiters: ["[[", "]]"],
+            mixins: [mix],
+            data() {
+                return {
+                    originalDict: {
+                        '美食': [
+                            '中餐厅', '小吃快餐店', '酒吧'
+                        ],
+                        '购物': [
+                            '购物中心', '百货商场', '便利店', '市场'
+                        ],
+                        '生活服务': [
+                            '洗衣店', '宠物服务'
+                        ],
+                        '旅游景点': [
+                            '公园', '景点', '文物古迹'
+                        ],
+                        '休闲娱乐': [
+                            '农家院', '电影院', 'ktv', '休闲广场'
+                        ],
+                        '运动健身': [
+                            '体育场馆', '健身中心'
+                        ],
+                        '教育培训': [
+                            '中学', '小学', '幼儿园'
+                        ],
+                        '医疗': [
+                            '综合医院', '诊所', '药店', '急救中心', '医疗保健'
+                        ],
+                        '交通设施': [
+                            '地铁站', '公交车站', '停车场'
+                        ],
+                        '金融': [
+                            '银行', '信用社'
+                        ],
+                        '公司企业': [
+                            '公司', '园区'
+                        ]
+                    }, // 初始列表数据
+                    pageTag: '1',
+                    //navbar 上的标签
+                    statue_taglist: ['', 'info', 'success', 'warning'],
+                    tag_type: '',
+
+                    itemsToShow: 5, // 每次展示的列表项数量
+                    currentIndex: 0 // 当前滚动位置
+                };
+            },
+            computed: {
+                infiniteDict() {
+                    let result = {};
+                    for (let i = 0; i < 5; i++) {
+                        for (const [key, value] of Object.entries(this.originalDict)) {
+                            result[key] = value;
+                        }
+                    }
+                    return result;
+                }
+            },
+            mounted() {
+                this.startAutoScroll();
+
+            },
+            methods: {
+                startAutoScroll() {
+                    setInterval(() => {
+                        this.currentIndex = (this.currentIndex + 1) % (Object.keys(this.originalDict).length - 4);
+                        this.$refs.list.style.transform = `translateY(-${this.currentIndex * 40}px)`; // 根据列表项高度调整位移距离
+                    }, 1200); // 自动滚动间隔时间，单位为毫秒
+                },
+
+            }
+        })
+    {% endblock %}
+</script>
+</body>
+</html>

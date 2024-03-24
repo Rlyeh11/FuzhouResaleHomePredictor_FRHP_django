@@ -1,0 +1,42 @@
+.el-link.el-link--default {
+    color: #303133;
+}
+
+.el-link.el-link--default:hover {
+    color: #303133;
+}
+
+.content {
+    width: 900px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    /*display: flex;*/
+    margin: auto;
+}
+
+.content .content-row {
+    /*position: relative;*/
+}
+
+.content .breadcrumb {
+    /*position: relative;*/
+    width: 380px;
+    height: 60px;
+    border-radius: 17px;
+    margin-bottom: 15px;
+}
+
+.content .card {
+    /*position: relative;*/
+    height: 600px;
+    width: 900px;
+    border-radius: 17px;
+    /*z-index: auto;*/
+}
+
+#map {
+    height: 450px;
+    width: 100%;
+    border-radius: 17px;
+}
