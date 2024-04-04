@@ -9,71 +9,360 @@
 {% endblock %}
 
 {% block main %}
-    <el-main>
+    <el-main style="overflow: hidden; height: 1800px">
         <div class="content">
             <div class="content-row">
-                <el-card class="breadcrumb">
-                    <el-breadcrumb separator-class="el-icon-arrow-right">
-                        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                        <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-                        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-                        <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-                    </el-breadcrumb>
-                </el-card>
+                <div class="firs-row">
+                    <el-row :gutter="0">
+                        <el-col :span="12">
+                            <el-card class="breadcrumb">
+                                <el-breadcrumb separator-class="el-icon-arrow-right">
+                                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                                    <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+                                    <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+                                    <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+                                </el-breadcrumb>
+                            </el-card>
+                        </el-col>
+                        {#                        <el-col :span=""></el-col>#}
+                        <el-col :span="12" style="justify-content: right; display: flex">
+                            <el-card class="breadcrumb">
+                                tips
+                            </el-card>
+                        </el-col>
+                    </el-row>
+                </div>
             </div>
             <div class="content-row">
-                <el-card class="card">
-                    <div id="map">
-                    </div>
-                </el-card>
-                <el-card class="card">
+                <el-collapse v-model="activeNames" accordion>
+                    <el-collapse-item :name="1" :disabled="true">
+                        <template slot="title">
+                            <span class="collapse-text" style="color: black; font-size: 15px">房屋位置</span>
+                        </template>
 
-                </el-card>
-                <el-card class="card">
+                        <el-card class="card">
+                            <div>
+                                <div id="map">
+                                </div>
+                            </div>
+                            <div class="map-tool">
+                                <el-row :gutter="50">
+                                    <el-col :span="8">
+                                        <el-input type="text" v-model="input" placeholder="搜索地点">
+                                            <el-button slot="append" icon="el-icon-search"
+                                                       @click="search_location"></el-button>
+                                        </el-input>
 
-                </el-card>
-                <el-card class="card">
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-input v-model="features.longitude" @blur="mapcenter_view">
+                                            <template slot="prepend">经度:</template>
+                                        </el-input>
+                                        <el-input v-model="features.latitude" @blur="mapcenter_view"
+                                                  style="margin-top: 8px">
+                                            <template slot="prepend">纬度:</template>
+                                        </el-input>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-button type="info" @click="nextCollapseItem">下一步<i
+                                                class="el-icon-arrow-right el-icon--right"></i></el-button>
+                                    </el-col>
+                                </el-row>
+                            </div>
+                        </el-card>
 
-                </el-card>
+                    </el-collapse-item>
+                    <el-collapse-item :name="2" :disabled="true">
+                        <el-card class="card">
+                            <transition name="el-fade-in">
+                                <div v-show="collapse_2_index==1">
+                                    <div style="align-items: center; justify-content: center; display: flex">
+                                        <el-image src="{% static 'assert/house-decoration.jpg' %}"
+                                                  style="height: 370px; width: 680px; border-radius: 17px; display: flex; margin-bottom: 50px"
+                                        ></el-image>
+                                    </div>
+                                    {#       行政区,房屋结构,房屋面积,房屋朝向,房屋装修,房屋类型,楼层位置,楼层数#}
+                                    <div class="card-content"
+                                         style="width: 80%; align-items: center;position: absolute; left: 50%; transform: translateX(-50%);">
+
+                                        <el-row :gutter="0" style="margin-bottom: 20px">
+                                            <el-col :span="3" style="margin-left: 30px">
+                                                <div style="width: 80px; height: 40px; position: relative; display: flex; margin:auto;
+                                                justify-content: center; align-items: center; font-size: 16px">
+                                                    房屋类型：
+                                                </div>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <el-select v-model="features.house_type" placeholder="请选择">
+                                                    <el-option
+                                                            v-for="item in house_type"
+                                                            :key="item"
+                                                            :label="item"
+                                                            :value="item">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-col>
+                                            <el-col :span="3" style="margin-left: 70px">
+                                                <div style="width: 80px; height: 40px; position: relative; display: flex; margin:auto;
+                                                justify-content: center; align-items: center; font-size: 16px">
+                                                    房屋装修：
+                                                </div>
+                                            </el-col>
+                                            <el-col :span="6">
+                                                <el-select v-model="features.house_decoration" placeholder="请选择">
+                                                    <el-option
+                                                            v-for="item in house_decoration"
+                                                            :key="item"
+                                                            :label="item"
+                                                            :value="item">
+                                                    </el-option>
+                                                </el-select>
+                                            </el-col>
+                                        </el-row>
+                                        <el-row>
+                                            <el-col style="justify-content: right; display: flex; padding-right: 30px">
+                                                <el-button type="info" @click="nextCardItem" style="border-radius: 30px"
+                                                           plain>好了？下一步
+                                                </el-button>
+                                            </el-col>
+                                        </el-row>
+                                    </div>
+                                </div>
+                            </transition>
+                            <transition name="el-fade-in">
+                                <div v-show="collapse_2_index==2">
+                                    <el-row :gutter="20">
+                                        <el-col :span="10" style="margin-left: 20px">
+                                            <el-image src="{% static 'assert/house-outside.jpeg' %}"
+                                                      style="height: 500px; width: 400px; border-radius: 17px; display: flex"></el-image>
+                                        </el-col>
+                                        <el-col :span="10" style="position: absolute; right: 50px">
+                                            <el-row style="display: flex;height: 40px; margin-bottom: 20px">
+                                                <el-col :span="8">
+                                                    <div style="position: absolute; font-size: 15px; width: 80px; top: 50%; transform: translateY(-50%);">
+                                                        房屋类型：
+                                                    </div>
+                                                </el-col>
+                                                <el-col style="font-size: 15px">
+                                                    <el-select v-model="features.house_structure" placeholder="请选择">
+                                                        <el-option
+                                                                v-for="item in house_structure"
+                                                                :key="item"
+                                                                :label="item"
+                                                                :value="item">
+                                                        </el-option>
+                                                    </el-select>
+                                                </el-col>
+                                            </el-row>
+
+                                            <el-row style="display: flex;height: 40px; margin-bottom: 20px">
+                                                <el-col :span="8">
+                                                    <div style="position: absolute; font-size: 15px; width: 80px; top: 50%; transform: translateY(-50%);">
+                                                        房屋面积：
+                                                    </div>
+                                                </el-col>
+                                                <el-col style="font-size: 15px" >
+                                                    <el-input>
+                                                        <template slot="append">平方米</template>
+                                                    </el-input>
+                                                </el-col>
+
+                                            </el-row>
+                                            <el-row style="height: 40px">
+                                                <el-col :span="24" style="text-align: center;">
+                                                    <div style="height: 40px; position: absolute; font-size: 15px;  top: 50%; transform: translateY(-50%);">
+                                                        房屋朝向：
+                                                    </div>
+
+                                                </el-col>
+                                            </el-row>
+                                            <el-row style="height: 80px">
+                                                <el-checkbox-group v-model="features.house_forward"
+                                                                   v-for="item in house_forward"
+                                                                   size="medium">
+                                                    <el-col :span="6">
+                                                        <el-checkbox :label="item"></el-checkbox>
+                                                    </el-col>
+                                                </el-checkbox-group>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="12">
+                                                    <div style="position: absolute; font-size: 15px; width: 80px; top: 50%; transform: translateY(-50%);">
+                                                        房屋总楼层数：
+                                                    </div>
+                                                </el-col>
+                                                <el-col style="font-size: 15px">
+                                                    <el-select v-model="features.house_structure" placeholder="请选择">
+                                                        <el-option
+                                                                v-for="item in house_structure"
+                                                                :key="item"
+                                                                :label="item"
+                                                                :value="item">
+                                                        </el-option>
+                                                    </el-select>
+                                                </el-col>
+
+                                            </el-row>
+                                            <el-row>
+                                                <div style="height: 100%; width: 400px">
+
+                                                    <el-button type="info" @click="previousCardItem"
+                                                               style="border-radius: 30px"
+                                                               plain>上一步
+                                                    </el-button>
+                                                    <el-button type="info" @click="nextCardItem"
+                                                               style="border-radius: 30px"
+                                                               plain>好了？下一步
+                                                    </el-button>
+                                                </div>
+                                            </el-row>
+
+
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                            </transition>
+
+                        </el-card>
+                        <el-button type="info" @click="previousCollapseItem"><i
+                                class="el-icon-arrow-left el-icon--left"></i>上一步
+                        </el-button>
+                        <el-button type="info" @click="nextCollapseItem">下一步<i
+                                class="el-icon-arrow-right el-icon--right"></i></el-button>
+                    </el-collapse-item>
+                    <el-collapse-item :name="3" :disabled="true">
+                        <el-card class="card">
+
+                        </el-card>
+                    </el-collapse-item>
+                    <el-collapse-item :name="4" :disabled="true">
+                        <el-card class="card">
+
+                        </el-card>
+                    </el-collapse-item>
+                </el-collapse>
             </div>
+        </div>
+        <div class="right-tips">
+            <el-card></el-card>
         </div>
     </el-main>
 
 {% endblock %}
-
-
 <script>
     {% block vue-script %}
-        new Vue({
+        var vm = new Vue({
             el: '#app',
             delimiters: ["[[", "]]"],
             mixins: [mix],
             data() {
                 return {
+                    {#导航栏 默认激活选项#}
                     pageTag: '2',
+                    {#绑定 坐标输入框#}
+                    input: '',
+                    {#绑定 折叠面板 默认激活选项#}
+                    activeNames: 2,
+                    collapse_2_index: 2,
                     features: {
-                        longitude: '',
-                        latitude: '',
-                    }
-                }
-            },
-            mounted() {
+                        longitude: 119.30290372864178,
+                        latitude: 26.088092671830356,
+                        district: '',
+                        house_type: '',
+                        house_decoration: '',
+                        house_structure: '',
+                        house_forward: [],
+                    },
+                    district: ['台江区', '鼓楼区', '晋安区', '仓山区', '闽侯县', '连江县', '长乐区', '平潭县', '马尾区'],
+                    {# 其他就是 暂无数据 #}
+                    house_type: ['平房', '板塔结合', '板楼', '塔楼', '其他'],
+                    house_decoration: ['精装', '简装', '毛坯', '其他'],
+                    house_structure: ['1室0厅', '1室1厅', '1室2厅', '2室0厅', '2室1厅', '2室2厅', '2室4厅', '3室0厅', '3室1厅', '3室2厅', '3室3厅', '4室0厅', '4室1厅', '4室2厅', '4室3厅', '4室4厅', '5室0厅', '5室1厅', '5室2厅', '5室3厅', '5室4厅', '5室5厅', '6室0厅', '6室1厅', '6室2厅', '6室3厅', '6室4厅', '6室5厅', '7室1厅', '7室2厅', '7室3厅', '7室4厅', '7室5厅', '8室1厅', '8室2厅', '8室3厅', '8室4厅', '9室0厅', '9室1厅', '9室2厅', '9室3厅', '9室4厅', '9室5厅', '9室6厅', '9室9厅', '10室1厅', '10室3厅', '11室3厅', '12室12厅', '12室6厅', '13室3厅', '14室2厅'],
+                    house_forward: ['东', '南', '西', '北', '东北', '东南', '西南', '西北']
 
+                };
             },
+            beforemount() {
+                this.mapcenter_view()
+            },
+            methods: {
+                search_location() {
+                    local.search(vm.$data.input);
+                    this.openVn();
+                },
+                mapcenter_view() {
+                    {#var viewPoint = new BMap.Point()#}
+                    viewPoint.lng = this.longitude
+                    viewPoint.lat = this.latitude
+                    convertor.translate([viewPoint], 1, 5, function (data) {
+                        if (data.status === 0) {
+                            var viewPoint = data.points[0];
+                            map.panTo(viewPoint);
+                            // 在地图移动后添加一个延时操作
+                            setTimeout(() => {
+                                map.panTo(viewPoint); // 再次确保地图中心移动到指定位置
+                            }, 100); // 可根据实际情况调整延时时间
+                        }
+                    });
+                },
+                openVn() {
+                    const h = this.$createElement;
+                    this.$message({
+                        message: h('p', null, [
+                            h('span', null, this.input),
+                            h('i', {style: 'color: teal'}, '查询成功')
+                        ])
+                    });
+                },
+                previousCollapseItem() {
+                    vm.activeNames = (vm.activeNames - 1) % 4;
+                },
+                nextCollapseItem() {
+                    vm.activeNames = (vm.activeNames + 1) % 4;
+                },
+                previousCardItem() {
+                    vm.collapse_2_index = (vm.collapse_2_index - 1) % 4;
+                },
+                nextCardItem() {
+                    vm.collapse_2_index = (vm.collapse_2_index + 1) % 4;
+                }
+
+            }
 
         });
+
     {% endblock %}
 </script>
 {% block map-script %}
     <script type="text/javascript">
         var map = new BMap.Map("map", {});                 // 创建Map实例
-        var point = new BMap.Point();
-        map.centerAndZoom(new BMap.Point(116.404, 39.928), 15);     // 初始化地图,设置中心点坐标和地图级别【中心点的值设置为苏州。地图级别值设置越大，地图就放大】
+        var init_point = new BMap.Point(119.30290372864178, 26.088092671830356);
+        var viewPoint = new BMap.Point(119.30290372864178, 26.088092671830356)
+        var marker = new BMap.Marker(init_point);  // 定义标记点
+        var convertor = new BMap.Convertor();
+        marker.setPosition(init_point);  // 设置标记点位置
+        map.addOverlay(marker);  // 添加标记点到地图
+        map.centerAndZoom(init_point, 15); // 初始化地图,设置中心点坐标和地图级别【中心点的值设置为苏州。地图级别值设置越大，地图就放大】
         map.enableScrollWheelZoom();
-        map.addEventListener("click", function (e) {
-            this.features.longitude = e.point.lng;
-            this.features.latitude = e.point.lat;
-            point = new BMap.Point(116.404, 39.915);
+        map.setMapStyleV2({styleId: 'dce4438dca9569e8216bf672c33ef7e8'});
+        map.removeControl(new BMap.CopyrightControl())
+        var local = new BMap.LocalSearch(map, {
+            renderOptions: {map: map}
         });
+        map.addEventListener("click", function (e) {
+            vm.features.longitude = e.point.lng;
+            vm.features.latitude = e.point.lat;
+            point = new BMap.Point(e.point.lng, e.point.lat);
+            map.clearOverlays();  // 清除地图上所有覆盖物
+            marker.setPosition(point);  // 设置标记点位置
+            map.addOverlay(marker);  // 添加标记点到地图
+            console.log(vm.features.longitude, vm.features.latitude)
+        });
+        map.addEventListener("mouseout", function () {
+            // 调用方法将地图中心对准绘制的点
+            vm.mapcenter_view();
+        });
+
+
     </script>
 {% endblock %}
