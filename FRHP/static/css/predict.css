@@ -28,21 +28,23 @@
 
 .breadcrumb {
     /*position: relative;*/
-    width: 100%;
+    width: 95%;
     height: 60px;
     border-radius: 17px;
     margin-bottom: 15px;
-    position: absolute;
+    position: relative;
     /*margin: auto;*/
     /*position: absolute;*/
 }
+
 .itemtip {
     width: 95%;
     height: 60px;
     border-radius: 17px;
     margin-bottom: 15px;
-    position: absolute;
-    margin: auto;
+    position: relative;
+    /*margin: auto;*/
+    /*right: 0;*/
 }
 
 .el-collapse-item__wrap {
@@ -129,3 +131,14 @@
     width: 80%;
 }
 
+.el-descriptions-item__label.is-bordered-label {
+    color: black;
+    background: #8c939d;
+}
+
+.el-descriptions__body .el-descriptions__table {
+    background-color: #8c939d;
+}
+.el-descriptions__body {
+    color: black;
+}

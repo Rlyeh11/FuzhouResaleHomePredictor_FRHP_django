@@ -26,12 +26,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+# 禁用 CSRF 保护
+# CSRF_COOKIE_SECURE = False
+# CSRF_COOKIE_HTTPONLY = False
+# CSRF_USE_SESSIONS = False
 # SESSION_COOKIE_SAMESITE = None
 # CSRF_COOKIE_SAMESITE = None
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
+
 # Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -41,14 +44,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 'corsheaders',
-    'introduce.apps.ModelConfig'
+    'introduce.apps.ModelConfig',
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -80,8 +84,16 @@ WSGI_APPLICATION = 'FRHP.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'fz_esfpoi_schema',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        # 'OPTIONS': {
+        #     'init_command': 'SET foreign_keys_checks=ON',
+        #     'charset': 'utf8'
+        # }
     }
 }
 
@@ -125,6 +137,14 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.TokenAuthentication',
+#     ],
+# }
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = []
 
 # CORS_ALLOW_ORIGIN = '*'
 # CORS_ALLOWED_ORIGINS = [
