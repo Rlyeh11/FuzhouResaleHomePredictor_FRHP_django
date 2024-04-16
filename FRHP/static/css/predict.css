@@ -33,6 +33,8 @@
     border-radius: 17px;
     margin-bottom: 15px;
     position: relative;
+    display: flex;
+    align-items: center;
     /*margin: auto;*/
     /*position: absolute;*/
 }
@@ -132,13 +134,18 @@
 }
 
 .el-descriptions-item__label.is-bordered-label {
-    color: black;
-    background: #8c939d;
+    /*color: black;*/
+    /*background: #8c939d;*/
 }
 
 .el-descriptions__body .el-descriptions__table {
-    background-color: #8c939d;
+    /*background-color: #8c939d;*/
 }
 .el-descriptions__body {
-    color: black;
+    /*color: black;*/
+}
+
+.el-loading-spinner .el-loading-text {
+    font-size: 19px;
+    width: 100%;
 }

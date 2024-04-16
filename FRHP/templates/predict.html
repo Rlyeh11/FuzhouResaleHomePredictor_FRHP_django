@@ -18,18 +18,21 @@
                     <el-row :gutter="0">
                         <el-col :span="12">
                             <el-card class="breadcrumb">
-                                <el-breadcrumb separator-class="el-icon-arrow-right">
-                                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                                    <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-                                    <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-                                    <el-breadcrumb-item>活动详情</el-breadcrumb-item>
-                                </el-breadcrumb>
+
+                                <el-avatar
+                                        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                                <span style="top: 35%; position:absolute; transform: translateX(50%)">你好, 用户</span>
                             </el-card>
                         </el-col>
                         {#                        <el-col :span=""></el-col>#}
                         <el-col :span="12" style="justify-content: right; display: flex">
                             <el-card class="itemtip">
-                                tips
+                                <el-steps :space="100" :active="activeNames-1" finish-status="success" simple
+                                          style="padding: 0; width: 100%">
+                                    <el-step title="位置"></el-step>
+                                    <el-step title="特征"></el-step>
+                                    <el-step title="预测价值"></el-step>
+                                </el-steps>
                             </el-card>
                         </el-col>
                     </el-row>
@@ -83,6 +86,9 @@
 
                     </el-collapse-item>
                     <el-collapse-item :name="2" :disabled="true">
+                        <template slot="title">
+                            <span class="collapse-text" style="color: black; font-size: 15px">房屋特征</span>
+                        </template>
                         <el-card class="card" v-loading="collapse_2_loading">
                             <transition name="el-zoom-in-top">
                                 <div v-show="collapse_2_index_list[0]==1">
@@ -131,6 +137,9 @@
                                         </el-row>
                                         <el-row>
                                             <el-col style="justify-content: right; display: flex; padding-right: 30px">
+                                                <el-button type="info" @click="previousCollapseItem" style="border-radius: 17px"><i
+                                                        class="el-icon-arrow-left el-icon--left"></i>上一步
+                                                </el-button>
                                                 <el-button type="info" @click="nextCardItem" style="border-radius: 30px"
                                                            plain>好了？下一步
                                                 </el-button>
@@ -250,7 +259,7 @@
                             <transition name="el-zoom-in-top">
                                 <div v-show="collapse_2_index_list[2]==1" style="position: relative; height: 100%">
                                     <el-row>
-                                        <el-descriptions title="用户信息" :column="4" direction="vertical" border>
+                                        <el-descriptions title="房屋特征" :column="4" direction="vertical" border>
                                             <el-descriptions-item v-for="(value, key) in features"
                                                                   :label="features_name[key]">
                                                 <div v-if="typeof(value) != 'object'" style="margin-bottom: 20px">
@@ -277,28 +286,69 @@
                                 </div>
                             </transition>
                         </el-card>
-                        <el-button type="info" @click="previousCollapseItem"><i
-                                class="el-icon-arrow-left el-icon--left"></i>上一步
-                        </el-button>
-                        <el-button type="info" @click="nextCollapseItem">下一步<i
-                                class="el-icon-arrow-right el-icon--right"></i></el-button>
+
+                        {#                        <el-button type="info" @click="nextCollapseItem">下一步<i#}
+                        {#                                class="el-icon-arrow-right el-icon--right"></i></el-button>#}
                     </el-collapse-item>
-                    <el-collapse-item :name="3" :disabled="true">
-                        <el-card class="card">
+                    <el-collapse-item :name="3" :disabled="true" style="height: 400px">
+                        <template slot="title">
+                            <span class="collapse-text" style="color: black; font-size: 15px">预测结果</span>
+                        </template>
+                        <el-card style="height: 400px;" class="card" v-loading="result_loading"
+                                 element-loading-text="加载中">
+                            <div style="height: 100%" v-show="!result_loading">
+                                <el-row v-show="predict_result">
+                                    <el-col :span="10">
+                                        <el-result icon="success" title="预测成功" subTitle="请根据提示进行操作"
+                                                   style="width: 100%">
+                                            <template slot="extra">
+                                                <el-button type="primary" size="medium"
+                                                           @click="window.location.href='/'">返回首页
+                                                </el-button>
+                                            </template>
+                                        </el-result>
+                                    </el-col>
+                                    <el-col :span="10">
+                                        <el-card style="height: 300px">
+                                            <el-descriptions title="预测结果" direction="vertical" :column="1" border>
+                                                <el-descriptions-item label="所在行政区">[[ features.district ]]
+                                                </el-descriptions-item>
+                                                <el-descriptions-item label="预测房屋价值">[[ house_price ]]
+                                                </el-descriptions-item>
+
+                                            </el-descriptions>
+                                            <span>*此结果仅提供参考*</span>
+                                        </el-card>
+                                    </el-col>
+
+                                </el-row>
+                                <el-row v-show="!predict_result">
+                                    <el-result icon="error" title="预测失败" subTitle="请根据提示进行操作"
+                                               style="width: 100%">
+                                        <template slot="extra">
+                                            <el-button type="primary" size="medium"
+                                                       @click="function() { vm.activeNames = 1; collapse_2_index=1 }"
+                                            >返回
+                                            </el-button>
+                                        </template>
+                                    </el-result>
+                                </el-row>
+                            </div>
+
 
                         </el-card>
                     </el-collapse-item>
-                    <el-collapse-item :name="4" :disabled="true">
-                        <el-card class="card">
-
-                        </el-card>
-                    </el-collapse-item>
+                    {#                    <el-collapse-item :name="4" :disabled="true">#}
+                    {#                        <el-card class="card">#}
+                    {##}
+                    {#                        </el-card>#}
+                    {#                    </el-collapse-item>#}
                 </el-collapse>
             </div>
         </div>
-        <div class="right-tips">
-            <el-card></el-card>
-        </div>
+        {#        <div class="right-tips">#}
+        {#            <el-card></el-card>#}
+        {#        </div>#}
     </el-main>
 
 {% endblock %}
@@ -319,6 +369,8 @@
                     collapse_2_index: 1,
                     collapse_2_index_list: [0, 0, 0],
                     collapse_2_loading: false,
+                    result_loading: true,
+                    predict_result: false,
                     features: {
                         district: '',
                         house_type: '',
@@ -351,6 +403,7 @@
                     house_structure: ['1室0厅', '1室1厅', '1室2厅', '2室0厅', '2室1厅', '2室2厅', '2室4厅', '3室0厅', '3室1厅', '3室2厅', '3室3厅', '4室0厅', '4室1厅', '4室2厅', '4室3厅', '4室4厅', '5室0厅', '5室1厅', '5室2厅', '5室3厅', '5室4厅', '5室5厅', '6室0厅', '6室1厅', '6室2厅', '6室3厅', '6室4厅', '6室5厅', '7室1厅', '7室2厅', '7室3厅', '7室4厅', '7室5厅', '8室1厅', '8室2厅', '8室3厅', '8室4厅', '9室0厅', '9室1厅', '9室2厅', '9室3厅', '9室4厅', '9室5厅', '9室6厅', '9室9厅', '10室1厅', '10室3厅', '11室3厅', '12室12厅', '12室6厅', '13室3厅', '14室2厅'],
                     house_forward: ['东', '南', '西', '北', '东北', '东南', '西南', '西北'],
                     house_height: ['低楼层', '中楼层', '高楼层'],
+                    house_price: 0,
 
                 };
             },
@@ -420,8 +473,8 @@
                             flag_warning = true;
                             warning_string.push('房屋装修');
                         }
-                        if (flag_warning){
-                            let msg = warning_string.join('、')+'未填'
+                        if (flag_warning) {
+                            let msg = warning_string.join('、') + '未填'
                             this.openVn_warning(msg)
                             return null
                         }
@@ -447,8 +500,8 @@
                             flag_warning = true;
                             warning_string.push('楼层高度');
                         }
-                        if (flag_warning){
-                            let msg = warning_string.join('、')+'未填'
+                        if (flag_warning) {
+                            let msg = warning_string.join('、') + '未填'
                             this.openVn_warning(msg)
                             return null
                         }
@@ -471,12 +524,19 @@
 
                 predict_houseprice() {
                     // 发送 POST 请求到 Django 接口
-                    axios.post('/api/queryDistrict/', {data: this.features})
+                    axios.post('/api/predict/', {data: this.features})
                         .then(response => {
+                            this.nextCollapseItem();
+                            vm.result_loading = false;
+                            vm.predict_result = true;
+                            vm.house_price = response.data['data']
                             // 处理成功响应
                             console.log(response.data);
                         })
                         .catch(error => {
+                            this.nextCollapseItem();
+                            vm.result_loading = false;
+                            vm.predict_result = false;
                             // 处理错误
                             console.error(error);
                         });
@@ -500,7 +560,6 @@
             var addComp = rs.addressComponents;
             vm.features.district = addComp.district
         })
-
         marker.setPosition(init_point);  // 设置标记点位置
         map.addOverlay(marker);  // 添加标记点到地图
         map.centerAndZoom(init_point, 15); // 初始化地图,设置中心点坐标和地图级别【中心点的值设置为苏州。地图级别值设置越大，地图就放大】
