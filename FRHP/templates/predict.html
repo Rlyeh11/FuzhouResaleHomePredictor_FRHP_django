@@ -58,7 +58,7 @@
                                                        @click="search_location"></el-button>
                                         </el-input>
                                         <div style="margin-top: 8px; position: relative">
-                                            <el-card style="height: 40px; align-content: center">
+                                            <el-card style="height: 40px; align-items: center;display: flex">
                                                 行政区：
                                                 <span style="right: 80px; position:absolute;">
                                                     [[ features.district ]]
@@ -215,7 +215,7 @@
                                                 <el-col style="font-size: 15px">
                                                     <el-input v-model="features.house_floor" placeholder="请输入"
                                                               @input="value => features.house_floor= Number(value.replace(/[^\d]/g,''))">
-                                                        <template slot="append">平方米</template>
+                                                        <template slot="append">层</template>
                                                     </el-input>
                                                 </el-col>
                                             </el-row>
@@ -294,7 +294,7 @@
                         <template slot="title">
                             <span class="collapse-text" style="color: black; font-size: 15px">预测结果</span>
                         </template>
-                        <el-card style="height: 400px;" class="card" v-loading="result_loading"
+                        <el-card style="height: 500px;" class="card" v-loading="result_loading"
                                  element-loading-text="加载中">
                             <div style="height: 100%" v-show="!result_loading">
                                 <el-row v-show="predict_result">
@@ -305,17 +305,24 @@
                                                 <el-button type="primary" size="medium"
                                                            @click="window.location.href='/'">返回首页
                                                 </el-button>
+                                                <el-button type="info" @click="previousCollapseItem" style="border-radius: 17px"><i
+                                                        class="el-icon-arrow-left el-icon--left"></i>上一步
+                                                </el-button>
                                             </template>
                                         </el-result>
                                     </el-col>
                                     <el-col :span="10">
-                                        <el-card style="height: 300px">
+                                        <el-card style="height: 450px">
                                             <el-descriptions title="预测结果" direction="vertical" :column="1" border>
-                                                <el-descriptions-item label="所在行政区">[[ features.district ]]
+                                                <el-descriptions-item label="所在行政区">
+                                                    [[ features.district ]]
                                                 </el-descriptions-item>
-                                                <el-descriptions-item label="预测房屋价值">[[ house_price ]]
+                                                <el-descriptions-item label="GBRT模型预测房屋总价（万元）">
+                                                    [[ GBRT_pred_price-12 ]] - [[ GBRT_pred_price+12 ]]
                                                 </el-descriptions-item>
-
+                                                <el-descriptions-item label="RF模型预测房屋总价（万元）">
+                                                    [[ RF_pred_price-12 ]] - [[ RF_pred_price+12 ]]
+                                                </el-descriptions-item>
                                             </el-descriptions>
                                             <span>*此结果仅提供参考*</span>
                                         </el-card>
@@ -350,7 +357,6 @@
         {#            <el-card></el-card>#}
         {#        </div>#}
     </el-main>
-
 {% endblock %}
 <script>
     {% block vue-script %}
@@ -403,7 +409,8 @@
                     house_structure: ['1室0厅', '1室1厅', '1室2厅', '2室0厅', '2室1厅', '2室2厅', '2室4厅', '3室0厅', '3室1厅', '3室2厅', '3室3厅', '4室0厅', '4室1厅', '4室2厅', '4室3厅', '4室4厅', '5室0厅', '5室1厅', '5室2厅', '5室3厅', '5室4厅', '5室5厅', '6室0厅', '6室1厅', '6室2厅', '6室3厅', '6室4厅', '6室5厅', '7室1厅', '7室2厅', '7室3厅', '7室4厅', '7室5厅', '8室1厅', '8室2厅', '8室3厅', '8室4厅', '9室0厅', '9室1厅', '9室2厅', '9室3厅', '9室4厅', '9室5厅', '9室6厅', '9室9厅', '10室1厅', '10室3厅', '11室3厅', '12室12厅', '12室6厅', '13室3厅', '14室2厅'],
                     house_forward: ['东', '南', '西', '北', '东北', '东南', '西南', '西北'],
                     house_height: ['低楼层', '中楼层', '高楼层'],
-                    house_price: 0,
+                    GBRT_pred_price: 0,
+                    RF_pred_price: 0,
 
                 };
             },
@@ -414,9 +421,11 @@
 
             methods: {
                 search_location() {
+                    map.clearOverlays();  // 清除地图上所有覆盖物
                     local.search(vm.$data.input);
                     this.openVn();
                 },
+                
                 mapcenter_view() {
                     var viewPoint = new BMap.Point(this.features.longitude, this.features.latitude);
                     {#map.panTo(viewPoint);#}
@@ -523,26 +532,27 @@
                 ,
 
                 predict_houseprice() {
+                    this.nextCollapseItem();
                     // 发送 POST 请求到 Django 接口
                     axios.post('/api/predict/', {data: this.features})
                         .then(response => {
-                            this.nextCollapseItem();
+                            
                             vm.result_loading = false;
                             vm.predict_result = true;
-                            vm.house_price = response.data['data']
+                            vm.GBRT_pred_price = response.data['data']['GBRT']
+                            vm.RF_pred_price = response.data['data']['RF']
                             // 处理成功响应
                             console.log(response.data);
                         })
                         .catch(error => {
-                            this.nextCollapseItem();
+                            
                             vm.result_loading = false;
                             vm.predict_result = false;
                             // 处理错误
                             console.error(error);
                         });
-                }
-                ,
-
+                    console.log(this.features)
+                },
             },
 
 
