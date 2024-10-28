@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+{% load static %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+
+
+    <link rel="stylesheet" href="{% static 'elementui/theme-chalk/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    {% block linkcss %}
+    {% endblock %}
+
+    <script src="{% static 'js/axios.min.js' %}"></script>
+
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header class="header">
+            <div class="nav">
+                <el-menu class="el-menu" mode="horizontal" :default-active="pageTag">
+                    <el-menu-item index="1" class="nav-menu-item" @click="openFullScreen(1)">
+                        {#                        <el-link href="/" :underline="false">#}
+                        <el-icon class="el-icon-s-home"></el-icon>
+                        首页
+                        {#                        </el-link>#}
+                    </el-menu-item>
+                    <el-menu-item index="2" class="nav-menu-item" @click="openFullScreen(2)">
+                        {#                        <el-link href="/predict" :underline="false">#}
+                        <el-icon class="el-icon-cpu"></el-icon>
+                        预测
+                        {#                        </el-link>#}
+                    </el-menu-item>
+                    <div class="blocknull"></div>
+                </el-menu>
+            </div>
+            <div class="header-user">
+                {#                <el-link href="/" style="">#}
+                <el-icon class="el-icon-user" style="height: 35px; font-size: 35px" href="/"></el-icon>
+                <span style="margin-left: 10px;"><a href="/">未登录</a></span>
+                {#                </el-link>#}
+            </div>
+
+        </el-header>
+        {% block main %}
+        {% endblock %}
+    </el-container>
+</div>
+<div id="app2">
+    <el-input v-model="iner"></el-input>
+</div>
+
+<script src="{% static 'vue/vue-2-7.js' %}"></script>
+<script src="{% static 'elementui/index.js' %}"></script>
+{#<script type="module" src="{% static 'router/index.js' %}"></script>#}
+<script>
+
+    var mix = {
+        data() {
+            return {
+                //页面离开加载
+                fullscreenLoading: false,
+            };
+        },
+        methods: {
+            openFullScreen(tag) {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.3)'
+                });
+                setTimeout(() => {
+                    loading.close();
+                    console.log(tag)
+                    if (tag === 1) {
+                        window.location.href = '/';
+                    } else {
+                        window.location.href = '/predict';
+                    }
+                }, 200);
+            }
+        }
+    }
+    {% block vue-script %}
+        {% if block.super %}
+            {{ block.super }}
+        {% else %}
+            new Vue({
+                el: '#app',
+                delimiters: ["[[", "]]"],
+                mixins: [mix],
+                data() {
+                    return {}
+                },
+            })
+        {% endif %}
+    {% endblock %}
+
+</script>
+
+<style>
+    body {
+        {#background-color: #c0ccda;#}
+        background-color: #c0ccda;
+    }
+</style>
+{% block map-script %}
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,151 @@
+.el-link.el-link--default {
+    color: #303133;
+}
+
+.el-link.el-link--default:hover {
+    color: #303133;
+}
+
+.content {
+    width: 900px;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    /*display: flex;*/
+    margin: auto;
+}
+
+.content .content-row {
+    /*position: relative;*/
+}
+.content .firs-row {
+    /*position: relative;*/
+    /*justify-content: center;*/
+    width: 100%;
+}
+
+.breadcrumb {
+    /*position: relative;*/
+    width: 95%;
+    height: 60px;
+    border-radius: 17px;
+    margin-bottom: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    /*margin: auto;*/
+    /*position: absolute;*/
+}
+
+.itemtip {
+    width: 95%;
+    height: 60px;
+    border-radius: 17px;
+    margin-bottom: 15px;
+    position: relative;
+    /*margin: auto;*/
+    /*right: 0;*/
+}
+
+.el-collapse-item__wrap {
+    background-color: rgba(255, 255, 255, 0);
+    border: 0;
+}
+/deep/ .el-collapse-item__content {
+    padding-bottom: 0;
+    font-size: 50px !important;
+}
+
+.el-collapse-item__header {
+    border-radius: 17px 17px 17px 17px;
+}
+
+.el-collapse-item__header.is-active {
+    border-radius: 17px 17px 0 0;
+
+}
+
+.el-collapse {
+    border: 0;
+}
+
+.content .card {
+    /*position: relative;*/
+    height: 600px;
+    width: 900px;
+    border-radius: 0 0 17px 17px;
+    padding-bottom: 0;
+    /*z-index: auto;*/
+}
+
+.el-card {
+    padding-bottom: 0;
+    padding-right: 0;
+}
+.collapse-text {
+    margin-left: 20px;
+
+}
+.el-collapse-item.is-disabled .el-collapse-item__header {
+    color: black;
+}
+
+#map {
+    height: 450px;
+    width: 100%;
+    border-radius: 17px;
+}
+
+.map-tool {
+    padding-top: 10px;
+}
+
+
+.el-collapse-item.is-disabled .el-collapse-item__header {
+  cursor: default; /* 设置鼠标指针为不允许点击的样式 */
+}
+
+.right-tips {
+    position: fixed;
+    right: 15%;
+    top: 200px;
+}
+
+.error {
+  color: red;
+  font-size: 10px;
+  padding-left: 5px;
+}
+
+.card2-input-text {
+    width: 15px;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.card-content {
+    width: 80%;
+}
+
+.el-descriptions-item__label.is-bordered-label {
+    /*color: black;*/
+    /*background: #8c939d;*/
+}
+
+.el-descriptions__body .el-descriptions__table {
+    /*background-color: #8c939d;*/
+}
+.el-descriptions__body {
+    /*color: black;*/
+}
+
+.el-loading-spinner .el-loading-text {
+    font-size: 19px;
+    width: 100%;
+}

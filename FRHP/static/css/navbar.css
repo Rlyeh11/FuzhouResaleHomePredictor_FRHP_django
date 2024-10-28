@@ -1,0 +1,108 @@
+
+.header {
+    margin-top: 15px;
+    /*align-items: center;*/
+    position: relative;
+    width: 100%;
+}
+
+
+.header-user {
+    position: absolute;
+    right: 17%;
+    top: 10%;
+    height: 80%;
+    width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: white;
+    border-radius: 30px;
+}
+
+.nav {
+    height: 100%;
+    width: 900px;
+    max-width: 950px;
+    min-width: 900px;
+    /*background-color: #3a8ee6;*/
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    /*margin-right: 0;*/
+    /*padding: 0 15px 0 0;*/
+    /*left: 50%;*/
+    /*transform: translate(-50%, -50%);*/
+}
+
+.el-menu {
+    border-radius: 15px;
+    width: 900px;
+    /*width: auto;*/
+}
+
+
+.nav .el-icon-s-home {
+    /*height: 20px;*/
+    width: 20px;
+    font-size: 20px;
+}
+.nav .el-icon-cpu {
+    /*height: 20px;*/
+    width: 20px;
+    font-size: 20px;
+}
+
+
+.nav .el-menu {
+    display: flex;
+    justify-content: center;
+}
+
+.nav .nav-menu-item {
+    font-size: 17px;
+}
+
+.nav .blocknull {
+    /*width: 500px;*/
+    /*width: 60%;*/
+}
+
+.el-menu--horizontal > .el-menu-item {
+    color: #8c939d;
+}
+
+.el-menu--horizontal > .el-menu-item.is-active {
+    border-bottom: 2px solid #000;
+}
+.el-loading-spinner {
+    background-color: #303133;
+    width: 100px;
+    margin: auto;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 15px 15px 15px;
+    border-radius: 15px;
+    top:40%;
+    transition: transform 1s;
+}
+
+/*全屏加载 icon*/
+.el-loading-spinner i {
+    color: #409EFF;
+    font-size: 50px;
+    height: 50px;
+    width: 50px;
+}
+
+.el-loading-spinner .el-loading-text {
+    font-size: 25px;
+    width: 50px;
+    margin-top: 5px;
+    margin-left: 2px;
+}
+

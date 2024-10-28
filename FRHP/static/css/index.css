@@ -1,0 +1,122 @@
+
+
+.el-card {
+    border: 1.5px;
+    border-radius: 17px;
+
+}
+
+.container {
+    width: 100%;
+    justify-content: center;
+}
+
+.content {
+    width: 900px;
+    height: 1800px;
+    margin: auto;
+}
+
+.content .overview {
+    position: relative;
+    height: 420px;
+
+}
+
+.content .overview .card-content-hover {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.5s; /* 设置渐变效果的持续时间 */
+    bottom: 100px;
+    left: 30px;
+    background-color: rgba(239, 239, 239, 0.75); /* 设置背景颜色并设定透明度 */
+    backdrop-filter: blur(5px); /* 添加模糊效果，值越大越模糊 */
+    /*transition: backdrop-filter 0.5s; !* 添加过渡效果 *!*/
+    border-radius: 12px; /* 圆角边框 */
+    padding-left: 25px;
+    padding-right: 20px;
+}
+
+.card-content-hover .card-text {
+    color: #3a3a3a;
+}
+
+.el-divider {
+    background-color: #000000;
+    /*padding-top: 20px;*/
+    margin-top: 2px;
+    margin-bottom: 12px;
+}
+
+/*.el-link {*/
+/*    !*height: 20px;*!*/
+/*    margin-bottom: 10px;*/
+/*}*/
+
+.el-link.el-link--default {
+    color: #303133;
+}
+
+.el-link.el-link--default:hover {
+    color: #303133;
+}
+
+.content .overview .card-content {
+    position: absolute;
+    opacity: 1;
+    transition: opacity 0.5s; /* 设置渐变效果的持续时间 */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    justify-content: center;
+}
+
+.card-content .card-text {
+    font-size: 42px;
+    text-align: center;
+    user-select: none;
+}
+
+.content .overview:hover .card-content-hover {
+    /*display: block;*/
+    opacity: 1;
+
+}
+
+.content .overview:hover .card-content {
+    /*display: block;*/
+    opacity: 0;
+
+}
+
+.content .procedure {
+    marging-top: 30px;
+    align-items: center;
+    justify-content: center;
+}
+
+.procedure .divider-vertical {
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.el-divider--vertical {
+  height: 180px;
+}
+
+.infinite-scroll {
+  overflow: hidden;
+}
+
+.infinite-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  transition: transform 500ms; // 添加过渡效果，实现平滑滚动
+}
+
+.infinite-list .tag-show {
+    margin-right: 7px;
+    margin-bottom: 8px;
+}
